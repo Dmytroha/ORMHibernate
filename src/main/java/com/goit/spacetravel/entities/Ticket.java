@@ -1,10 +1,17 @@
 package com.goit.spacetravel.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ticket")
+@Data
+@NoArgsConstructor
+@ToString
 public class Ticket {
 
     @Id
