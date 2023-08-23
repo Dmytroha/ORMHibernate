@@ -11,7 +11,7 @@ public class HibernateUtil {
         private static final HibernateUtil INSTANCE;
 
         @Getter
-        private SessionFactory sessionFactory;
+        private final SessionFactory sessionFactory;
 
         static {
             INSTANCE = new HibernateUtil();
