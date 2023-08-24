@@ -22,29 +22,44 @@ public class Main {
     public static void main(String[] args) {
 
         BasicConfigurator.configure();
-        logger.info("Application started");
+        logger.info("--------------------Application started-------------------------");
         HibernateUtil hu = HibernateUtil.getInstance();
         SessionFactory sessionFactory = hu.getSessionFactory();
         Session session = sessionFactory.openSession();
 
 
-
+        // use Client CRUD serveries
         ClientService clientService = new ClientService();
-        clientService.findAll().forEach(client -> logger.info(client.getName()));
+        Client newClient = new Client();
+        newClient.setName("Dude");
+        clientService.create(newClient);
+        Long newClientId = newClient.getId();
+        logger.info("----------------->Read new client ID {}",newClientId);
+        clientService.findAll().forEach(client -> logger.info("--------------------------->{}", client.getName()));
 
-        Optional<Client> clientOptional = clientService.getById(4L); // may we should catch NumberFormatException
-        clientOptional.ifPresent(client -> logger.info(client.getName()));
+        Optional<Client> clientOptional = clientService.getById(newClientId);
+        clientOptional.ifPresent(client -> logger.info("Last added Client ----> id = {}, name = {}",client.getId(),client.getName()));
+        clientService.deleteById(newClientId);
 
+
+        Planet newPlanet = new Planet();
+        newPlanet.setId("237"); newPlanet.setName("SUN237");
         PlanetService planetService = new PlanetService();
-        planetService.findAll().forEach(planet -> logger.info(planet.getName()));
+        planetService.findAll().forEach(planet -> logger.info("------------------------->{}",planet.getName()));
 
         Optional<Planet> planetOptional = planetService.getById("JUP");
-        planetOptional.ifPresent(planet -> logger.info(planet.getName()));
+        planetOptional.ifPresent(planet -> logger.info("------------------------>{}",planet.getName()));
+
+        planetService.create(newPlanet);
+        planetService.findAll().forEach(planet -> logger.info("------------------------->{}",planet.getName()));
+        String newPlanetId = newPlanet.getId();
+
+        planetOptional = planetService.getById(newPlanetId);
+        planetOptional.ifPresent(planet ->logger.info("Last added Planet ----------->Id = {},  name = {}",planet.getId(),planet.getName()));
+        planetService.deleteById(newPlanetId);
 
         session.close();//close session
-
         hu.close(); //close session factory
-
-        logger.info("Application finished");
+        logger.info("------------------Application finished-------------------");
         }
     }
