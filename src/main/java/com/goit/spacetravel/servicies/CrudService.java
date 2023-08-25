@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CrudService <T>{
-    public final String  NO_SUCH_ID_MSG = "No element with such id";
+
+    String  NO_SUCH_ID_MSG = "No element with such id";
     void create(T t);
     void update(T t);
     List<T> findAll();

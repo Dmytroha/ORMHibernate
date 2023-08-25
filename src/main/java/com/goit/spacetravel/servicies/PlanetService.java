@@ -1,7 +1,6 @@
 package com.goit.spacetravel.servicies;
 
 import com.goit.spacetravel.HibernateUtil;
-import com.goit.spacetravel.entities.Client;
 import com.goit.spacetravel.entities.Planet;
 import jakarta.persistence.EntityTransaction;
 import org.hibernate.Session;

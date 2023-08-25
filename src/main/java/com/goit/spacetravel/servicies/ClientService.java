@@ -10,7 +10,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Supplier;
+
 
 public class ClientService implements CrudService <Client>{
     private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
