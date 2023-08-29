@@ -12,8 +12,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
-public class ClientService implements CrudService <Client>{
+public class ClientService implements  ClientCrudService{
     private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+
 
     @Override
     public void create(Client client) {
@@ -41,7 +42,7 @@ public class ClientService implements CrudService <Client>{
     }
 
     @Override
-    public <I extends Number > Optional<Client> getById(I id) {
+    public  Optional<Client> getById(Long id) {
         try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.get(Client.class, id));
         }
@@ -49,13 +50,7 @@ public class ClientService implements CrudService <Client>{
     }
 
     @Override
-    public <S extends CharSequence> Optional<Client> getById(S id) {
-        return getById( Long.valueOf((String) id));
-
-    }
-
-    @Override
-    public <I extends Number> void deleteById(I id) {
+    public  void deleteById(Long id) {
 
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -68,12 +63,6 @@ public class ClientService implements CrudService <Client>{
             throw new NoSuchElementException(NO_SUCH_ID_MSG);
         }
 
-    }
-
-
-    @Override
-    public <S extends CharSequence> void deleteById(S id) {
-        deleteById(Long.valueOf((String) id));
     }
 
     @Override

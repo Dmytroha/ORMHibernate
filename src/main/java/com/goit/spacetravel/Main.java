@@ -2,6 +2,8 @@ package com.goit.spacetravel;
 
 import com.goit.spacetravel.entities.Client;
 import com.goit.spacetravel.entities.Planet;
+import com.goit.spacetravel.exeptions.CantFindPropertiesException;
+import com.goit.spacetravel.migratiron.FlywayUtils;
 import com.goit.spacetravel.servicies.ClientService;
 import com.goit.spacetravel.servicies.PlanetService;
 import org.apache.log4j.BasicConfigurator;
@@ -19,14 +21,22 @@ import java.util.Optional;
 public class Main {
 
    private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
 
         BasicConfigurator.configure();
         logger.info("--------------------Application started-------------------------");
+
+        FlywayUtils flywayUtils = FlywayUtils.getInstance();
+        try {
+            flywayUtils.init();
+        } catch (CantFindPropertiesException e) {
+            logger.error(e.getMessage());
+        }
+
+
         HibernateUtil hu = HibernateUtil.getInstance();
         SessionFactory sessionFactory = hu.getSessionFactory();
         Session session = sessionFactory.openSession();
-
 
         // use Client CRUD serveries
         ClientService clientService = new ClientService();
@@ -55,7 +65,8 @@ public class Main {
         String newPlanetId = newPlanet.getId();
 
         planetOptional = planetService.getById(newPlanetId);
-        planetOptional.ifPresent(planet ->logger.info("Last added Planet ----------->Id = {},  name = {}",planet.getId(),planet.getName()));
+        planetOptional.ifPresent(planet ->logger.info("Last added Planet ----------->Id = {},  name = {}",
+                planet.getId(),planet.getName()));
         planetService.deleteById(newPlanetId);
 
         session.close();//close session

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public class PlanetService implements CrudService <Planet>{
+public class PlanetService implements  PlanetCrudService{
     private final SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
     @Override
     public void create(Planet planet) {
@@ -35,26 +35,16 @@ public class PlanetService implements CrudService <Planet>{
         return planetList;
 
     }
-
     @Override
-    public <I extends Number> Optional<Planet> getById(I id) {
-               return getById( id.toString());
-       }
-
-    @Override
-    public <S extends CharSequence> Optional<Planet> getById(S id) {
+    public  Optional<Planet> getById(String id) {
         try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.get(Planet.class, id));
         }
     }
 
-    @Override
-    public <I extends Number> void deleteById(I id) {
-        deleteById(id.toString());
-    }
 
     @Override
-    public <S extends CharSequence> void deleteById(S id) {
+    public  void deleteById(String id) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
