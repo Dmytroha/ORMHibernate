@@ -10,7 +10,7 @@ CREATE TABLE Planet (
 
 CREATE TABLE Ticket (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     client_id BIGINT,
     from_planet_id VARCHAR(50),
     to_planet_id VARCHAR(50),

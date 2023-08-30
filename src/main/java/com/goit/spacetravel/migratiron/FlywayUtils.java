@@ -11,7 +11,7 @@ import static org.hibernate.cfg.AvailableSettings.*;
 
 public class FlywayUtils {
     private static final FlywayUtils INSTANCE;
-
+    private Flyway fw;
     static {
         INSTANCE = new FlywayUtils();
     }
@@ -19,8 +19,9 @@ public class FlywayUtils {
         try {
             Properties properties = new Properties();
             properties.load(new FileReader(Main.class.getClassLoader().getResource("hibernate.properties").getPath()));
+         fw =
             Flyway
-                    .configure()
+                    .configure().cleanDisabled(false)
                     .dataSource(
                             (String) properties.get(URL),
                             (String) properties.get(USER),
@@ -28,12 +29,14 @@ public class FlywayUtils {
                     .baselineOnMigrate(true)
                     .failOnMissingLocations(true)
                     .locations("db/migration")
-                    .load()
-                    .migrate();
+                    .load();
+
         }catch (IOException e){
             throw new CantFindPropertiesException("Can't find hibernate.properties in resources");
         }
     }
+    public void clean(){ fw.clean(); }
+    public void migrate(){fw.migrate();}
     public static FlywayUtils getInstance() {
         return INSTANCE;
     }
